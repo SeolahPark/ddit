@@ -1,0 +1,9 @@
+case 1:
+				System.out.println("메모 목록");
+
+				List<MemoVO> list = controller.getMemoList();
+
+				for (MemoVO memo : list) { // 출력만 해주면되니까
+					System.out.println(memo);
+				}
+				break;

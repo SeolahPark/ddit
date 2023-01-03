@@ -1,0 +1,25 @@
+package admin.service;
+
+import java.util.List;
+import java.util.Map;
+
+import vo.MemberVO;
+import vo.ServiceVO;
+
+public interface IAdminService {
+
+    //서비스 승인할 리스트를 가져오는 메서드
+
+	public List<Map<String, Object>> serviceApprovedlist();
+
+	//서비스 승인 메서드
+	public int serviceApproved(int serviceNo);
+
+	
+	//회원목록을 가져오는 메서드
+	public List<MemberVO> selectMemberlist();
+
+	 //관리자가 승인된 서비스 목록을 조회하는 메서드
+	public List<Map<String, Object>> serviceApprovedConfirmlist();
+
+}

@@ -1,0 +1,23 @@
+package admin.dao;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import config.SqlMapClientFactory;
+
+public class AdminDaoImpl implements IAdminDao{
+	private static AdminDaoImpl instance;
+	private SqlMapClient smc;
+
+	private AdminDaoImpl() {
+		smc = SqlMapClientFactory.getSqlMapClient();
+	}
+
+	public static IAdminDao getInstance() {
+		if (instance == null)
+			instance = new AdminDaoImpl();
+		return instance;
+	}
+	
+	
+	
+}

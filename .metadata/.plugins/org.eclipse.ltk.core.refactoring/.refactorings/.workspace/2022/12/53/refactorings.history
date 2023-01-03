@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;JSPBook&apos;" deleteContents="true" description="Delete resource &apos;JSPBook&apos;" element1="/JSPBook" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1672059523184"/>&#x0A;<refactoring comment="Copy 0 elements to &apos;imgs&apos;&#x0D;&#x0A;- Destination element: &apos;imgs&apos;" description="Copy compilation units" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1672242297996" target="/MYBOARD/WebContent/imgs" units="0" version="1.0"/>
+</session>

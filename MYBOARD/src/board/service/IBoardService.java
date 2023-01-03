@@ -1,0 +1,33 @@
+package board.service;
+
+import java.util.List;
+import java.util.Map;
+
+import vo.BoardCommentVO;
+import vo.BoardVO;
+import vo.PageVO;
+
+public interface IBoardService {
+	
+	public List<BoardVO> getAllBoardList(Map<String, Object> map);
+	
+	public PageVO pageInfo(int page, String stype, String sword);
+
+	public int getTotalCount(Map<String, Object>  map);
+	
+	public BoardVO getBoard(int boardNo);
+
+	public void setCountIncrement(int boardNo);
+
+	public int insertBoard(BoardVO vo);
+
+	public void deleteBoard(int boardNo);
+
+	public void updateBoard(BoardVO vo);
+
+	public void insertComment(BoardCommentVO vo);
+
+	public List<BoardCommentVO> selectComment(int boardNo);
+
+	public void deleteComment(int board_comment_no);
+}

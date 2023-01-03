@@ -1,0 +1,355 @@
+<%@page import="vo.FilesVO"%>
+<%@page import="java.util.List"%>
+<%@page import="vo.BoardCommentVO"%>
+<%@page import="vo.MemberVO"%>
+<%@page import="java.util.Map"%>
+<%@page import="vo.BoardVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>모람모람</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="" name="keywords">
+<meta content="" name="description">
+
+<!-- Favicon -->
+<link href="<%=request.getContextPath()%>/img/favicon.ico" rel="icon">
+
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- Icon Font Stylesheet -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Libraries Stylesheet -->
+<link href="<%=request.getContextPath()%>/lib/animate/animate.min.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Template Stylesheet -->
+<link href="<%=request.getContextPath() %>/css/style.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/style/public.css">
+<script src="<%=request.getContextPath() %>/js/public.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.serializejson.js" type="text/javascript"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-3.6.1.min.js"></script>
+<style type="text/css">
+ #boardModifyForm, #replyModifyForm { 
+ 	display: none; 
+ } 
+ 
+input idx{
+	width : calc(12% - 1%);
+	height:
+	float : right;
+}
+</style>
+<%
+
+	BoardVO boardVo = (BoardVO) request.getAttribute("boardInfo");
+	List<BoardCommentVO> boardCommentList = (List<BoardCommentVO>) request.getAttribute("boardCommentList");
+	List<BoardCommentVO> boardReCommentList = (List<BoardCommentVO>) request.getAttribute("boardReCommentList");
+	
+	boolean isWriter = true;
+	int categoryNo = (int)session.getAttribute("boardCategoryNo");
+	
+	System.out.println(categoryNo);
+	
+	boolean isLogin = (boolean)session.getAttribute("isLogined");
+	
+	System.out.println(isLogin);
+	
+	MemberVO memberVo = null;
+	Map<String, Object> loginInfo = null;
+	if(isLogin){
+		loginInfo = (Map<String, Object>) session.getAttribute("loginInfo");
+		memberVo = (MemberVO)loginInfo.get("memberInfo");
+	}
+	
+	System.out.println(memberVo.getMem_name());
+	
+%>
+<script>
+
+$(function(){
+	$("#btnUpdate").on("click", function() {
+		var form = document.getElementById("boardForm");
+		form.method = "GET";
+		form.action = "<%=request.getContextPath()%>/board/Update.do";
+		form.submit();
+	});
+	
+	$("#btnDelete").on("click", function(){
+		var form = document.getElementById("boardForm");
+		form.action = "<%=request.getContextPath()%>/board/Delete.do";
+		form.submit();
+	});
+	
+	$("#btnList").on("click", function(){
+		var form = document.getElementById("boardForm");
+		form.action = "<%=request.getContextPath()%>/board/List.do";
+		form.submit();
+	});
+	
+	$("#addReply").on("click",function(){
+		var form = document.getElementById("boardCommentForm");
+		form.method = "GET";
+		form.action = "<%=request.getContextPath()%>/board/InsertComment.do";
+		form.submit();
+	});
+	
+	$('.action').on('click', function(){
+		 vidx =  $(this).attr('idx');
+		 vname =  $(this).attr('name');
+		 
+		 if(vname == "r_modify"){  //댓글 수정 메서드
+			if( $('#boardModifyForm').css('display') != "none"){
+		    	replyReset();
+			}
+			p3tag =  $(this).parents('.p4').find('.p3');
+			modicont = $(p3tag).html().trim();  //br태그가 있다 
+			mcont = modicont.replace(/<br>/g, "\n")
+			$('#boardModifyForm #text').val(mcont);
+			$(p3tag).empty();
+			$(p3tag).append($('#boardModifyForm'));
+			$('#boardModifyForm').show();
+			
+		}else if(vname == "r_delete"){		// 댓글 삭제 메서드
+			$.ajax({
+				url : '<%=request.getContextPath()%>/board/ReplyDelete.do',
+				data : { "reNo" : vidx },
+				type : 'get',
+				success : function(res){
+					if(res=="1"){
+						location.href="/MRMR/board/Read.do?board_no=<%=boardVo.getBoard_no()%>";
+					}
+				},
+				error : function(xhr){
+					alert("상태 : " + xhr.status)
+				}
+			})
+		}
+	});
+
+	$('#btnok').on('click', function(){
+		modicont = $('#boardModifyForm #text').val();  //엔터가 포함 
+		modi = modicont.replace(/\r/g,"").replace(/\n/g, "<br>");
+		vp3 = $('#boardModifyForm').parent();
+		$('body').append($('#boardModifyForm'));
+		$('#boardModifyForm').hide();
+		$.ajax({
+			url : '<%=request.getContextPath()%>/board/ReplyUpdate.do',
+			data : {
+				"board_comment_no" : vidx,
+				"board_comment_content" : modicont
+			},
+			type : 'post',
+			success : function(res){
+				$(vp3).html(modi); 
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status)
+			}
+		})
+	});
+	
+	replyReset = function(){
+		vp3 =  $('#boardModifyForm').parent();
+		$('body').append($('#boardModifyForm'));
+		$('#boardModifyForm').hide();
+		vp3.html(modicont);
+	}
+
+	$('#btnreset').on('click', function(){
+		replyReset();
+	})
+
+	//대대대대대대대대대대대대대대대대대댓글 글수정 편집창에서 확인버튼 클릭 
+	
+	$('.addreply').on('click', function(){
+		vidx =  $(this).attr('idx');
+		vname =  $(this).attr('name');
+		
+		if(vname == "r_add"){  //대댓글 추가 
+			if( $('#replyModifyForm').css('display') != "none"){
+		    	replyReset();
+			}
+			p3tag =  $(this).parents('.p4').find('.p3');
+			$(p3tag).append($('#replyModifyForm'));
+			$('#replyModifyForm').show();
+		}else if(vname == "r_delete"){
+			$.ajax({
+				url : '<%=request.getContextPath()%>/board/ReplyDelete.do',
+				data : { "reNo" : vidx },
+				type : 'get',
+				success : function(res){
+					if(res=="1"){
+						location.href="/MRMR/board/Read.do?board_no=<%=boardVo.getBoard_no()%>";
+					}
+				},
+				error : function(xhr){
+					alert("상태 : " + xhr.status);
+				}
+			})
+		}
+	});
+	
+	$('#btnok2').on('click', function(){
+		modicont = $('#replyModifyForm #text').val();  //엔터가 포함 
+		modi = modicont.replace(/\r/g,"").replace(/\n/g, "<br>");
+		vp3 = $('#replyModifyForm').parent();
+		$('body').append($('#replyModifyForm'));
+		$('#replyModifyForm').hide()
+		$.ajax({
+			url : '<%=request.getContextPath()%>/board/ReplyReplyUpdate.do',
+			data : {
+				"board_comment_no" : vidx,
+				"board_comment_content" : modicont,
+				"board_no" : "<%=boardVo.getBoard_no()%>",
+				"mem_no" : "<%=memberVo.getMem_no()%>"
+			},
+			type : 'post',
+			success : function(res){
+				if(res == 1){
+					location.href="/MRMR/board/Read.do?board_no=<%=boardVo.getBoard_no()%>"; 
+				}
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			}
+		})
+	});
+	
+	replyreplyReset = function(){
+		vp3 =  $('#replyModifyForm').parent();
+		$('body').append($('#replyModifyForm'));
+		$('#replyModifyForm').hide();
+		vp3.html(modicont);
+	}
+	$('#btnreset2').on('click', function(){
+		replyreplyReset();
+	})
+});
+</script>
+
+</head>
+<body>
+    <jsp:include page="../../../header.jsp"></jsp:include>
+
+	<!-- //댓글 수정 편집창 -->
+	<div id="boardModifyForm">
+		<textarea id="text" rows="5" cols="40"></textarea>
+		<input type="button" value="확인" id="btnok"> <input
+			type="button" value="취소" id="btnreset">
+	</div>
+	<!-- //대댓글 수정 편집창 -->
+	<div id="replyModifyForm">
+		<textarea id="text" rows="5" cols="40"></textarea>
+		<input type="button" value="확인" id="btnok2"> 
+		<input type="button" value="취소" id="btnreset2">
+	</div>
+
+	<div class="container-fluid pt-4 px-4" style="width: 1000px;">
+		<div class="bg-light rounded h-100 p-4">
+
+			<form name="boardForm" id="boardForm">
+				<input type="hidden" id="boardVo" name="boardVo" value="<%=boardVo.getBoard_no()%>"> 
+				<input type="hidden" id="memNo" name="memNo" value="<%=memberVo.getMem_no()%>">
+				<input type="hidden" id="boardCategoryNo" name="boardCategoryNo" value="<%=boardVo.getBoard_category_no()%>">
+
+				<div style="float: right;">
+				<%if(isLogin){ 
+					if((memberVo.getMem_no() == boardVo.getMem_no()) || memberVo.getMem_grade() == 9){%>
+					<input id="btnUpdate" type="button" class="btn btn-outline-primary m-2" value="수정">
+					<input id="btnDelete" type="button" class="btn btn-outline-primary m-2" value="삭제">
+				<% }}%>
+					<input id="btnList" type="button" class="btn btn-outline-primary m-2" value="목록보기">
+				</div>
+				<br/><br/><br/>
+				<label for="floatingInput">제목</label>
+				<div class="form-floating mb-3">
+					<input type="text" class="form-control" id="floatingInput" value="<%=boardVo.getBoard_title()%>" readonly/>
+				</div>
+
+				<label for="floatingInput">작성일</label>
+				<div class="form-floating mb-3">
+					<input type="text" class="form-control" id="floatingInput" value="<%=boardVo.getBoard_date()%>" readonly/>
+				</div>
+
+				<label for="floatingInput">작성자</label>
+				<div class="form-floating mb-3">
+					<input type="text" class="form-control" id="floatingInput" value="<%=boardVo.getMem_name()%>" readonly/>
+				</div>
+
+				<label for="floatingInput">조회수</label>
+				<div class="form-floating mb-3">
+					<input type="text" class="form-control" id="floatingInput" value="<%=boardVo.getBoard_hit()%>" readonly/>
+				</div>
+
+				<label for="floatingInput">내용</label>
+				<div class="form-floating mb-3">
+					<input type="text" class="form-control" id="floatingInput" value="<%=boardVo.getBoard_content()%>" readonly/>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+	<div class="container-fluid pt-4 px-4 reply-body" style="width: 1000px;">
+		<%if (boardCommentList != null || boardCommentList.size() > 0) {
+			for (BoardCommentVO boardCommentVO : boardCommentList) {
+				if(boardCommentVO.getBoard_comment_parents() == 0){%>
+		<div class="p4">
+		<%if (memberVo.getMem_no() == boardCommentVO.getMem_no()) {%>
+			<span class="p3"><%=boardCommentVO.getBoard_comment_content()%>
+			<div  style="float: right;">
+			<input idx="<%=boardCommentVO.getBoard_comment_no()%>"  type="button" name="r_add" class="btn btn-outline-primary m-2 addreply" value="등록">
+			<input idx="<%=boardCommentVO.getBoard_comment_no()%>"  type = "button" name="r_modify" class="btn btn-outline-primary m-2 action" value="수정"> 
+			<input idx="<%=boardCommentVO.getBoard_comment_no()%>"  type="button" name="r_delete" class="btn btn-outline-primary m-2 action"  value="삭제">
+			</div>
+			</span></br></br>
+			<%if(boardReCommentList != null || boardCommentList.size() > 0) {
+				for(BoardCommentVO boardReComment : boardReCommentList){
+					if(boardReComment.getBoard_comment_parents() == boardCommentVO.getBoard_comment_no()){%>
+					<span class="p2">└─ <%=boardReComment.getBoard_comment_content()%></span></br></br>
+						<%if(isLogin){
+							if((memberVo.getMem_no() == boardCommentVO.getMem_no() || memberVo.getMem_grade() == 9)){%>
+					<hr/>
+					<%}}}}}
+					if(isLogin){
+						if((memberVo.getMem_no() == boardCommentVO.getMem_no() || memberVo.getMem_grade() == 9)){%>
+					</div><hr/>
+				<%}}} else {%>
+					<%=boardCommentVO.getBoard_comment_content()%> <br /> <%
+				}}}} else { %>
+			작성된 댓글이 없습니다.
+		<%}%>
+
+		<%if(isLogin){
+			if(categoryNo !=1){%>
+			<form name="modifyForm" id="boardCommentForm">
+				<div class="form-floating mb-3" id="modifyForm">
+					<input type="hidden" id="boardVo" name="boardVo" value="<%=boardVo.getBoard_no()%>">
+					 <input type="hidden" id="memNo" name="memNo" value="<%=memberVo.getMem_no()%>">
+					<textarea cols="110" rows="3" name="content" id="text"></textarea>
+					<button id="addReply" class="btn btn-primary rounded-pill m-2">댓글등록</button>
+				</div>
+			</form>
+		<% }}%>
+	</div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%=request.getContextPath()%>/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="<%=request.getContextPath()%>/js/main.js"></script>
+    
+    <jsp:include page="../../../footer.jsp"></jsp:include>
+</body>
+</html>

@@ -1,0 +1,21 @@
+package files.service;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import vo.FilesVO;
+
+public interface IFilesService {
+	public void insertFiles(HttpServletRequest request, String saveDirectory, int maxPostSize) throws SQLException;
+	
+	public String selectFileCategoty(int file_category_no) throws SQLException;
+	
+	public FilesVO selectFiles(Map<String, Object> map) throws SQLException;
+	
+	public int updateFiles(Map<String, Object> map) throws SQLException;
+	
+	public int searchFile(Map<String, Object> map) throws SQLException;
+
+}

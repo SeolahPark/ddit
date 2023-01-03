@@ -1,0 +1,86 @@
+package board.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import board.dao.BoardDAO;
+import board.dao.IBoardDAO;
+import vo.BoardCommentVO;
+import vo.BoardVO;
+import vo.PageVO;
+
+public class BoardService implements IBoardService {
+	private static IBoardService instance = null;
+	private IBoardDAO dao = null;
+	private BoardService() {
+		dao = BoardDAO.getInstance();
+	}
+	public static IBoardService getInstance() {
+		if(instance == null) instance = new BoardService();
+		return instance;
+	}
+	
+	public List<BoardVO> getAllBoardList(Map<String, Object> map) {
+		return dao.getAllBoardList(map);
+	}
+	
+	public PageVO pageInfo(int page, String stype, String sword) {
+		Map<String, Object>  map = new HashMap<String, Object>();
+		map.put("stype", stype);
+		map.put("sword", sword);
+		int count = this.getTotalCount(map);
+		
+		int start = (page-1) * PageVO.getPerList() + 1;
+		int end = start + PageVO.getPerList() - 1;
+		if(end > count)  end = count;
+			
+		int totalPage =  (int)Math.ceil((double)count / PageVO.getPerList());
+		
+		int startPage = ((page-1) /PageVO.getPerPage() * PageVO.getPerPage() ) + 1;
+		int endPage = startPage + PageVO.getPerPage() - 1;
+		if(endPage > totalPage ) endPage = totalPage;
+		
+		PageVO  vo = new PageVO();
+		vo.setStart(start);
+		vo.setEnd(end);
+		vo.setStartPage(startPage);
+		vo.setEndPage(endPage);
+		vo.setTotalPage(totalPage);
+		
+		return vo;
+	}
+
+	@Override
+	public int getTotalCount(Map<String, Object> map) {
+		return dao.getTotalCount(map);
+	}
+	
+	public BoardVO getBoard(int boardNo) {
+		return dao.getBoard(boardNo);
+	}
+
+	public void setCountIncrement(int boardNo) {
+		dao.setCountIncrement(boardNo);
+	}
+	@Override
+	public int insertBoard(BoardVO vo) {
+		return dao.insertBoard(vo);
+	}
+	
+	@Override
+	public void deleteBoard(int boardNo) {
+		dao.deleteBoard(boardNo);
+	}
+	
+	@Override
+	public void updateBoard(BoardVO vo) {
+		dao.updateBoard(vo);
+	}
+	@Override
+	public void insertComment(BoardCommentVO vo) {
+		
+	}
+
+
+}

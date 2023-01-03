@@ -1,0 +1,83 @@
+package board.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import config.SqlMapClientFactory;
+import vo.BoardVO;
+
+public class BoardDAO implements IBoardDAO {
+	private static IBoardDAO instance = null;
+	private SqlMapClient smc = null;
+	private BoardDAO() {
+		smc = SqlMapClientFactory.getSqlMapClient();
+	}
+	public static IBoardDAO getInstance() {
+		if(instance == null) instance = new BoardDAO();
+		return instance;
+	}
+	
+	@Override
+	public List<BoardVO> getAllBoardList(Map<String, Object> map) {
+		List<BoardVO> list = new ArrayList<BoardVO>();
+		try {
+			list = smc.queryForList("board.getAllBoardList",map);
+		} catch (SQLException e) {
+			System.out.println("getAllBoardList 오류");
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public BoardVO getBoard(int boardNo) {
+		BoardVO vo = new BoardVO();
+		try {
+			vo = (BoardVO) smc.queryForObject("board.getBoard", boardNo);
+		} catch (SQLException e) {
+			System.out.println("getBoard 오류");
+			e.printStackTrace();
+		}
+		return vo;
+	}
+	
+	@Override
+	public void setCountIncrement(int boardNo) {
+		try {
+			smc.update("board.setCountIncrement",boardNo);
+		} catch (SQLException e) {
+			System.out.println("setCountIncrement 오류");
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public int getTotalCount(Map<String, Object> map){
+		int num = 0;
+		try {
+			num = (int) smc.queryForObject("board.getTotalCount", map);
+		} catch (SQLException e) {
+			System.out.println("getTotalCount 오류");
+			e.printStackTrace();
+		}
+		return num;
+	}
+	
+	@Override
+	public int insertBaord(BoardVO vo) {
+		int num = 0;
+		try {
+			num = (int) smc.queryForObject("board.insertBaord", vo);
+		} catch (SQLException e) {
+			System.out.println("getTotalCount 오류");
+			e.printStackTrace();
+		}
+		return num;
+	}
+	
+	
+}

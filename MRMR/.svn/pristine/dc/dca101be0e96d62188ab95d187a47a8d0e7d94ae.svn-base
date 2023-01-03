@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="admin">
+	
+	<select id="serviceApprovedlist" resultClass="HashMap">
+    select a.* ,b.service_category_sub_name
+	from service a, service_category_sub b
+	where a.service_category_sub_no =b.service_category_sub_no  and 
+  		  a.service_approved_no = 0 
+	</select>
+	
+	<update id="serviceApproved" parameterClass="int">
+	update service
+ 	set service_approved_no = 1,
+ 	    service_approved_date = sysdate
+  	where service_no = #int#
+	</update>
+	
+	
+	<select id="selectMemberlist" resultClass="vo.MemberVO">
+	select * from mem
+    where mem_no != 25
+	order by mem_no desc
+	</select>
+	
+	
+	<select id="serviceApprovedConfirmlist" resultClass="HashMap">
+	    select a.*, b.service_category_sub_name
+        from service a, service_category_sub b
+        where a. service_category_sub_no = b.service_category_sub_no and
+          	  service_approved_no = 1 
+              order by service_approved_date desc
+	</select>
+</sqlMap>

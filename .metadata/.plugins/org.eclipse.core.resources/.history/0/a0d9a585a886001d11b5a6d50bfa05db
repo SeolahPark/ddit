@@ -1,0 +1,11 @@
+package board.service;
+
+import vo.PageVO;
+
+public class BoardService {
+
+	public PageVO pageInfo(int page, String stype, String sword) {
+		return null;
+	}
+
+}

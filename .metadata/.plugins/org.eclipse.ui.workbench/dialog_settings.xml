@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="ImportExportAction">
+		<item key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID" value="org.eclipse.ui.wizards.import.FileSystem"/>
+		<item key="ImportExportPage.STORE_SELECTED_EXPORT_WIZARD_ID" value="org.eclipse.ui.wizards.export.ZipFile"/>
+		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
+			<item value="org.eclipse.ui.Basic"/>
+		</list>
+		<list key="ImportExportPage.STORE_EXPANDED_EXPORT_CATEGORIES">
+			<item value="org.eclipse.ui.Basic"/>
+		</list>
+	</section>
+	<section name="FileSystemImportWizard">
+		<item key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID" value="false"/>
+		<item key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID" value="false"/>
+		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="C:\Users\seolah\Desktop\중프_모람모람\00. 산출물_모람모람\moram"/>
+			<item value="C:\Users\seolah\Documents\카카오톡 받은 파일\mrmr"/>
+			<item value="F:\boardpro"/>
+			<item value="C:\Users\seolah\Desktop\중프_모람모람\00. 산출물_모람모람\chatting"/>
+			<item value="C:\Users\seolah\Desktop\중프_\00. 산출물_모람모람\morammoram\morammoram"/>
+			<item value="C:\Users\seolah\Documents\카카오톡 받은 파일\playddit-main\playddit"/>
+			<item value="F:\workspace\JavaStudy"/>
+			<item value="C:\Users\seolah\Documents\카카오톡 받은 파일\POI"/>
+			<item value="C:\Users\seolah\Documents\카카오톡 받은 파일\C_threadTest\C_threadTest"/>
+			<item value="F:\collectionTest"/>
+			<item value="F:\Project\TEAM5\source\YJM09"/>
+			<item value="E:\새 폴더\eclipse-workspace\ddit_first"/>
+			<item value="E:\새 폴더\eclipse-workspace\JavaBasic"/>
+		</list>
+	</section>
+	<section name="NewWizardAction">
+		<item key="NewWizardSelectionPage.STORE_SELECTED_ID" value="org.eclipse.jst.jsp.ui.internal.wizard.NewJSPWizard"/>
+		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.eclipse.wst.web.ui"/>
+		</list>
+	</section>
+	<section name="PreferencesImportWizard">
+	</section>
+	<section name="org.eclipse.ui.preferences.keysPreferencePage">
+	</section>
+	<section name="ZipFileImportWizard">
+	</section>
+	<section name="ZipFileExportWizard">
+		<item key="WizardZipFileResourceExportPage1.STORE_CREATE_STRUCTURE_ID" value="true"/>
+		<item key="WizardZipFileResourceExportPage1.STORE_COMPRESS_CONTENTS_ID" value="true"/>
+		<list key="WizardZipFileResourceExportPage1.STORE_DESTINATION_NAMES_ID">
+			<item value="E:\MYBOARD.zip"/>
+			<item value="C:\Users\seolah\Desktop\중프_모람모람\00. 산출물_모람모람\00.MRMR_백업\PL_PSA\20221215_MRMR_PSA.zip"/>
+			<item value="C:\Users\seolah\Desktop\중프_모람모람\00. 산출물_모람모람\모람모람\WebSocket_Chat.zip"/>
+		</list>
+	</section>
+	<section name="EditorSelectionDialog">
+	</section>
+</section>

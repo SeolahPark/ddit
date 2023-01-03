@@ -1,0 +1,51 @@
+package test;
+
+public class TestExample {
+	public static void main(String[] args) {
+		// 문제 1
+		// MEMBER1 테이블을 작성하시오
+		// 컬럼 항목은 아래와 같다.
+		// PK명은 pk_member1 이고 사용할 컬럼명은 MEM_NO이다
+		// FK는 없다
+		// MEM_NO NUMBER(8) NOT NULL
+		// MEM_ID VARCHAR2(100) NOT NULL
+		// MEM_PW VARCHAR2(100) NOT NULL
+		// MEM_NAME VARCHAR2(100) NOT NULL
+		// MEM_BIRTH VARCHAR2(100) NULL
+		// MEM_GENDER VARCHAR2(30) NULL
+		// MEM_GRADE NUMBER(8) NULL
+		
+		// 문제 2
+		// NOTICE1 테이블을 작성하시오
+		// 컬럼 항목은 아래와 같다.
+		// PK명은 pk_notice1 이고 사용할 컬럼명은 BO_NO이다
+		// FK는 없다
+		// BO_NO NUMBER(8) NOT NULL
+		// BO_TITLE VARCHAR2(200) NOT NULL,
+		// BO_CONTENT VARCHAR2(2000) NOT NULL
+		// BO_WRITER VARCHAR2(100) NOT NULL
+		// BO_HIT NUMBER(8) DEFAULT 0 NULL
+		// BO_DATE DATE DEFAULT SYSDATE NULL
+		
+		// 문제 3
+		// FREE1 테이블을 작성하시오
+		// 컬럼 항목은 아래와 같다.
+		// PK명은 pk_free1 이고 사용할 컬럼명은 BO_NO이다
+		// FK는 없다
+		// BO_NO NUMBER(8) NOT NULL
+		// BO_TITLE VARCHAR2(200) NOT NULL,
+		// BO_CONTENT VARCHAR2(2000) NOT NULL
+		// BO_WRITER VARCHAR2(100) NOT NULL
+		// BO_HIT NUMBER(8) DEFAULT 0 NULL
+		// BO_DATE DATE DEFAULT SYSDATE NULL
+		
+		// 문제 4
+		// CONNECTIONLOG 테이블을 작성하시오
+		// 컬럼 항목은 아래와 같다.
+		// PK명은 pk_connectionlog 이고 사용할 컬럼명은 CONN_NO이다
+		// FK명은 fk_connectionlog_member 이고 사용할 컬럼명은 MEMBER1테이블의 MEM_ID이다
+		// CONN_NO NUMBER(8) NOT NULL
+		// MEM_NO NUMBER(8) NOT NULL
+		// CONN_DATE DATE NOT NULL
+	}
+}

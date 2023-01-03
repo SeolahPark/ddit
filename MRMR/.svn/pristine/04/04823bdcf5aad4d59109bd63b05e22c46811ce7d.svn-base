@@ -1,0 +1,52 @@
+package admin.service;
+
+import java.util.List;
+import java.util.Map;
+
+import admin.dao.AdminDaoImpl;
+import admin.dao.IAdminDao;
+import vo.MemberVO;
+import vo.ServiceVO;
+
+public class AdminServiceImpl implements IAdminService{
+	private static AdminServiceImpl instance;
+	private IAdminDao dao;
+
+	private AdminServiceImpl() {
+		dao = AdminDaoImpl.getInstance();
+	}
+
+	public static IAdminService getInstance() {
+		if (instance == null)
+			instance = new AdminServiceImpl();
+		return instance;
+	}
+
+	@Override
+	public List<Map<String,Object>> serviceApprovedlist() {
+		// TODO Auto-generated method stub
+		return dao.serviceApprovedlist();
+	}
+
+	@Override
+	public int serviceApproved(int serviceNo) {
+		// TODO Auto-generated method stub
+		return dao.serviceApproved(serviceNo);
+	}
+
+	@Override
+	public List<MemberVO> selectMemberlist() {
+		// TODO Auto-generated method stub
+		return dao.selectMemberlist();
+	}
+
+	@Override
+	public List<Map<String, Object>> serviceApprovedConfirmlist() {
+		// TODO Auto-generated method stub
+		return dao.serviceApprovedConfirmlist();
+	}
+
+	
+	
+	
+}

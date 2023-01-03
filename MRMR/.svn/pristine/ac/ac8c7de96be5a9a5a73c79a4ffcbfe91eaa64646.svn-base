@@ -1,0 +1,105 @@
+package cart.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import cart.service.CartService;
+import cart.service.CartServiceImpl;
+import vo.CartVO;
+
+public class CartController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	private CartService cartService = CartServiceImpl.getInstance();
+	
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 주문내역 가져오기
+		String requestURI = req.getRequestURI();
+		String contextPath = req.getContextPath();
+		String command = requestURI.substring(contextPath.length());
+		
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html; charset=utf-8");
+		
+		System.out.println(command + " ==> request this page");
+		
+		if(command.equals("/cart/cartList.do")) {
+			List<CartVO> cartList = new ArrayList<CartVO>();
+			Map<String,Object> map = new HashMap<String, Object>();
+
+			int mem_no = 0;
+			//int mem_no = Integer.parseInt(req.getParameter("mem_no"));
+			
+			mem_no = 27; // 테스트용 임시
+			
+			cartList = cartService.selectCartList(mem_no);
+			
+			req.setAttribute("cartList", cartList);
+		}
+		req.getRequestDispatcher("/serviceOrderView.jsp").forward(req, resp);
+		
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String requestURI = req.getRequestURI();
+		String contextPath = req.getContextPath();
+		String command = requestURI.substring(contextPath.length());
+		
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html; charset=utf-8");
+		
+		System.out.println(command + " 페이지를 요청합니다!");
+		if(command.equals("/cart/order.do")) { // 주문 정보 저장
+			
+			// 주문할 때 필요한 정보
+			int service_no = Integer.parseInt(req.getParameter("service_no")); 
+			int mem_no =  Integer.parseInt(req.getParameter("mem_no")); 
+			
+			CartVO cartVO = new CartVO();
+			cartVO.setService_no(service_no);
+			cartVO.setMem_no(mem_no);
+			
+			cartService.insertCart(cartVO);
+			req.getRequestDispatcher("/serviceOrderView.jsp").forward(req, resp);
+			
+		}else if(command.equals("/cart/orderModify.do")) {
+			Map<String,Object> cartMap = new HashMap<String, Object>();
+			
+			// 주문상태를 변경할 주문 번호
+			int cart_no = Integer.parseInt(req.getParameter("cart_no")); 
+			String state = req.getParameter("cart_state");
+			int cart_state = 0;
+			
+			switch(state) {
+			case "orderComplete" : // 주문 완료
+				cart_state = 1;
+				break;
+			case "refundRequest" : // 환불요청
+				cart_state = 2;
+				break;
+			case "refundComplete" : // 환불완료
+				cart_state = 3;
+				break;
+			case "serviceComplete" : // 서비스완료
+				cart_state = 4;
+				break;
+			}
+			
+			cartMap.put("cart_no", cart_no);
+			cartMap.put("cart_state_no", cart_state);
+			
+			cartService.updateCartState(cartMap);
+		}
+	}
+
+}

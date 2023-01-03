@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="board">
+	<select id="selectReportCount" resultClass="HashMap">
+		SELECT COUNT(REPORT.MEM_NO_BAD) AS REPORT_COUNT,
+			   REPORT.MEM_NO_BAD AS MEM_NO_BAD,
+			   MEM.MEM_NAME AS MEM_NAME
+		  FROM MEM, REPORT
+		 WHERE MEM.MEM_NO = REPORT.MEM_NO_BAD
+		 GROUP BY MEM.MEM_NAME, REPORT.MEM_NO_BAD
+	</select>
+	
+	<select id="selectBadMemInfo" parameterClass="int" resultClass="HashMap">
+		SELECT REPORT.REPORT_NO AS REPORT_NO,
+			   REPORT.REPORT_CONTENT AS REPORT_CONTENT,
+			   REPORT_CATEGORY_NO.REPORT_CATEGORY_NAME AS REPORT_CATEGORY_NAME,
+			   REPORT.MEM_NO_BAD AS MEM_NO_BAD
+		  FROM REPORT, REPORT_CATEGORY_NO
+		 WHERE REPORT.REPORT_CATEGORY_NO = REPORT_CATEGORY_NO.REPORT_CATEGORY_NO
+		   AND MEM_NO_BAD = #mem_no_bad#
+	</select>
+	
+</sqlMap>

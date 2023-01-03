@@ -1,0 +1,22 @@
+package admin.service;
+
+import admin.dao.AdminDaoImpl;
+import admin.dao.IAdminDao;
+
+public class AdminServiceImpl implements IAdminService{
+	private static AdminServiceImpl instance;
+	private IAdminDao dao;
+
+	private AdminServiceImpl() {
+		dao = AdminDaoImpl.getInstance();
+	}
+
+	public static IAdminService getInstance() {
+		if (instance == null)
+			instance = new AdminServiceImpl();
+		return instance;
+	}
+	
+	
+	
+}

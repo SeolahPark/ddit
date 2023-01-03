@@ -1,0 +1,24 @@
+package vo;
+
+public class BoardCommentVO {
+	private int board_comment_no;
+	private String board_comment_content;
+	private String board_comment_date;
+	private int mem_no;
+	private int board_no;
+	
+	public BoardCommentVO() { }
+	
+	public BoardCommentVO(int board_comment_no, String board_comment_content, String board_comment_date, int mem_no,
+			int board_no) {
+		super();
+		this.board_comment_no = board_comment_no;
+		this.board_comment_content = board_comment_content;
+		this.board_comment_date = board_comment_date;
+		this.mem_no = mem_no;
+		this.board_no = board_no;
+	}
+
+	
+
+}

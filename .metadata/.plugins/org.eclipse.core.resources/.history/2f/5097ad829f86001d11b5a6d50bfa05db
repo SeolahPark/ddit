@@ -1,0 +1,5 @@
+package boardDAO;
+
+public interface IBoardDAO {
+
+}

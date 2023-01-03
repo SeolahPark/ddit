@@ -1,0 +1,79 @@
+package admin.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import config.SqlMapClientFactory;
+import vo.MemberVO;
+
+public class AdminDaoImpl implements IAdminDao{
+	private static AdminDaoImpl instance;
+	private SqlMapClient smc;
+
+	private AdminDaoImpl() {
+		smc = SqlMapClientFactory.getSqlMapClient();
+	}
+
+	public static IAdminDao getInstance() {
+		if (instance == null)
+			instance = new AdminDaoImpl();
+		return instance;
+	}
+
+	@Override
+	public List<Map<String,Object>> serviceApprovedlist() {
+		List<Map<String,Object>> list = null;
+		try {
+			list = smc.queryForList("admin.serviceApprovedlist");
+			System.out.println("list22"+list);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int serviceApproved(int serviceNo) {
+		int res=0;
+		try {
+			res= smc.update("admin.serviceApproved",serviceNo);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+
+	@Override
+	public List<MemberVO> selectMemberlist() {
+		List<MemberVO> list = null;
+		try {
+			list = smc.queryForList("admin.selectMemberlist");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> serviceApprovedConfirmlist() {
+		List<Map<String, Object>> list = null;
+		try {
+			list = smc.queryForList("admin.serviceApprovedConfirmlist");
+			System.out.println("list"+list);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	
+}

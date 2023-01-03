@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="ajax"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="ajax"/>
+			<item value="&quot;"/>
+			<item value="replyReset"/>
+			<item value="modifyForm"/>
+			<item value="request.getParameter(\&quot;files\&quot;)"/>
+			<item value="formFile"/>
+			<item value="filecheck"/>
+			<item value="preview"/>
+			<item value="\\"/>
+			<item value="null"/>
+			<item value="sendRedirect"/>
+			<item value="request.getContextPath() + &quot;/board/Read.do"/>
+			<item value="wysihtml5-sandbox"/>
+			<item value="wysihtml5-toolbar"/>
+			<item value="currentpage"/>
+		</list>
+		<list key="replacehistory">
+			<item value="&apos;"/>
+			<item value="/"/>
+			<item value="#00004d"/>
+			<item value="Noto Sans KR"/>
+			<item value="class=&quot;nav-item nav-link&quot;"/>
+			<item value="&quot;"/>
+			<item value="#009CFF"/>
+			<item value="chatNo"/>
+			<item value="targetNo"/>
+			<item value="&quot;notice&quot;"/>
+			<item value="boNo"/>
+			<item value="DBUtil3"/>
+			<item value="Class"/>
+			<item value="자유게시판"/>
+			<item value="singleInt"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1577"/>
+		<item key="DIALOG_Y_ORIGIN" value="246"/>
+		<item key="DIALOG_WIDTH" value="288"/>
+		<item key="DIALOG_HEIGHT" value="391"/>
+		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
+	</section>
+	<section name="org.eclipse.jst.jsp.ui.internal.preferences.ui.JSPTemplatePreferencePage$JSPEditTemplateDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="263"/>
+		<item key="DIALOG_Y_ORIGIN" value="171"/>
+		<item key="DIALOG_WIDTH" value="612"/>
+		<item key="DIALOG_HEIGHT" value="331"/>
+		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
+	</section>
+</section>

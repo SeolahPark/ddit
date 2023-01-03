@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="notice">
+	<insert id="create" parameterClass="noticeVO" >
+		INSERT INTO NOTICE (BONO, TITLE, CONTENT, WRITER, REGDATE)
+		VALUES (SEQ_NOTICE.NEXTVAL, #title#, #content#, #writer#, SYSDATE )
+	</insert>
+	
+	<select id="list" resultClass="noticeVO">
+		SELECT BONO, TITLE, CONTENT, WRITER, TO_DATE(REGDATE,'YYYY-MM-DD') AS REGDATE 
+		FROM NOTICE ORDER BY BONO DESC
+	</select>
+	
+	<select id="read" parameterClass="int" resultClass="noticeVO">
+		SELECT BONO, TITLE, CONTENT, WRITER, TO_DATE(REGDATE,'YYYY-MM-DD') AS REGDATE 
+		FROM NOTICE WHERE BONO = #boNo#
+	</select>
+	
+	<delete id="delete" parameterClass="int">
+		DELETE FROM NOTICE WHERE BONO = #boNo#
+	</delete>
+	
+	<delete id="modify" parameterClass="noticeVO">
+		UPDATE NOTICE SET TITLE = #title#, CONTENT = #content# WHERE BONO = #boNo#
+	</delete>
+	
+</sqlMap>

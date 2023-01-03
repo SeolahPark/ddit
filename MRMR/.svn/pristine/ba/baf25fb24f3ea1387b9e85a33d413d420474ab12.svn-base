@@ -1,0 +1,349 @@
+<%@page import="vo.MemberVO"%>
+<%@page import="java.util.Map"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<%
+Map<String, Object> loginInfo = (Map<String, Object>)session.getAttribute("loginInfo");
+MemberVO loginMemberInfo = (MemberVO)loginInfo.get("memberInfo");
+int existExpert = (Integer) loginInfo.get("existExpert");
+
+int grade = loginMemberInfo.getMem_grade();
+String gradeName = "";
+String toggleBtn = "";
+if(grade == 0){
+	gradeName = "일반회원";
+	toggleBtn = "전문가";
+}else if(grade == 1){
+	gradeName = "전문가";
+	toggleBtn = "일반회원";
+}else if(grade == 9){
+	gradeName = "관리자";
+}
+%>
+<script type="text/javascript">
+$(function(){
+	$("#withdrawal").on("click", function(){
+		if(confirm("정말로 탈퇴하시겠습니까?")){
+			location.href = "<%=request.getContextPath()%>/member/withdrawal.do?mem_no=<%=loginMemberInfo.getMem_no()%>";
+		}
+	})
+	
+	$("#toggle").on("click", function(){
+		location.href = "<%=request.getContextPath()%>/member/toggle.do";
+	})
+	
+	$("#updateMemberInfo").on("click", function(){
+		$.ajax({
+			url : "<%=request.getContextPath()%>/member/updateMemberInfo.do",
+			type : "get",
+			success : function(updateMemberForm){
+				$("#myPageDiv").html(updateMemberForm);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			},
+			dataType : "html"
+		})
+	})
+	
+	$("#enrollExpert").on("click", function(){
+		$.ajax({
+			url : "<%=request.getContextPath()%>/member/enrollExpert.do",
+			type : "get",
+			success : function(enrollExpertForm){
+				$("#myPageDiv").html(enrollExpertForm);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			},
+			dataType : "html"
+		})
+	})
+	
+	$("#chat").on("click", function(){
+		$.ajax({
+			url : "<%=request.getContextPath()%>/chat/main.do",
+			type : "get",
+			success : function(chat){
+				$("#myPageDiv").html(chat);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			},
+			dataType : "html"
+		})
+	})
+	
+	$("#myBoard").on("click", function(){
+		$.ajax({
+			url : "<%=request.getContextPath()%>/member/myBoard.do?mem_no=<%=loginMemberInfo.getMem_no()%>&page=1",
+			type : "get",
+			success : function(myBoard){
+				$("#myPageDiv").html(myBoard);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			},
+			dataType : "html"
+		})
+	})
+	
+	$("#schedule").on("click", function(){
+		$.ajax({
+			url : "<%=request.getContextPath()%>/member/schedule.do?mem_no=<%=loginMemberInfo.getMem_no()%>",
+			type : "get",
+			success : function(schedule){
+				$("#myPageDiv").html(schedule);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			},
+			dataType : "html"
+		})
+	})
+	
+	$("#serviceHistory").on("click", function(){
+		$.ajax({
+			url : "<%=request.getContextPath()%>/member/serviceHistory.do?mem_no=<%=loginMemberInfo.getMem_no()%>&page=1",
+			type : "get",
+			success : function(serviceHistory){
+				$("#myPageDiv").html(serviceHistory);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			},
+			dataType : "html"
+		})
+	})
+	
+	$("#wishlist").on("click", function(){
+		$.ajax({
+			url : "<%=request.getContextPath()%>/member/wishlist.do?mem_no=<%=loginMemberInfo.getMem_no()%>",
+			type : "get",
+			success : function(wishlist){
+				$("#myPageDiv").html(wishlist);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			},
+			dataType : "html"
+		})
+	})
+		
+	
+	
+	
+	//----------------------------------
+
+	
+	
+$('#serviceInsert').on("click",function(){
+	location.href="<%= request.getContextPath()%>/view/service/serviceInsert.jsp";
+});
+
+
+//내 서비스 리스트 
+$('#myServiceList').on('click',function(){
+	myservicelist();
+}) 
+
+myservicelist = function(){
+	$.ajax({
+		url : '<%= request.getContextPath()%>/service/myServiceList.do',
+		type : 'get',
+		<%-- 		data : { "memNo" : '<%= memberVO.getMem_no()%>' }, --%>
+		data : { "memNo" : '25' },
+		success : function(res){
+			console.log('test');
+			code="";
+			$.each(res,function(i,v){
+				code += "<a href='<%= request.getContextPath()%>/service/serviceDetail.do?serviceNo=" + v.service_no +"' 서비스디테일";
+				code += "<p>서비스 번호:"+ v.service_no +"[서비스이름:]"+v.service_name+"[서비스가격:]"+v.service_price+"</p></a>";
+				code += "<button type='button' id='serviceDelete' value='"+v.service_no+"'>서비스삭제</button>"; 
+				code += "<br>";
+				code += "<button type='button' id='serviceUpdate' value='"+v.service_no+"'>서비스수정</button>";
+				code += v.service_no; 
+				code += "<br>";
+			 })
+			$('#myPageDiv').append(code);
+		},
+		error : function(xhr){
+			alert("상태" + xhr.status);
+		},
+		dataType : 'json'
+	})
+}
+
+//서비스삭제
+$(document).on('click','#serviceDelete',function(){
+	val = $(this).val();
+	console.log(val);
+	$.ajax({
+		url : '<%= request.getContextPath()%>/service/serviceDelete.do',
+		type : 'get',
+		data : { "serviceNo" : val },
+		success : function(res){
+			if(res=='1'){
+				alert('삭제가 완료되었습니다.');
+			}
+			myservicelist();
+		},
+		error : function(xhr){
+			alert("상태" + xhr.status);				
+		},
+		dataType : 'text'
+	})
+}) //서비스삭제끝
+
+//서비스 수정
+	$(document).on('click','#serviceUpdate',function(){
+	val = $(this).val();
+	location.href= '<%= request.getContextPath() %>/service/serviceUpdate.do?serviceNo='+ val;
+	}) 
+
+	$('#myWishList').on('click',function(){
+	
+	$.ajax({
+		url : '<%= request.getContextPath()%>/service/myWishlist.do',
+		data : { "memNo" : '26' },
+		type : 'get',
+		success : function(res){
+			code="";
+			if(res!="찜 목록이 없습니다."){
+				$.each(res,function(i,v){
+					code += "<a href='<%= request.getContextPath()%>/service/serviceDetail.do?serviceNo=" + v.service_no +"' 서비스디테일";
+					code += "<p>서비스 번호:"+ v.service_no +"[서비스이름:]"+v.service_name+"[서비스가격:]"+v.service_price+"</a>";
+	  				code += "<button type='button' id='mywishDelete' value='"+v.service_no+"'>찜 삭제</button></p>"; 
+				}) 
+			}else{
+				code = "<p>"+res+"</p>";
+			}
+			$('#myWish').html(code);
+		},
+		error : function(xhr){
+			alert("에러"+xhr.status)
+		},
+		dataType : 'json'
+	}) //ajax끝
+}) //내 위시리스트 가져오기 끝
+
+$(document).on('click','#mywishDelete',function(){
+	$.ajax({
+		url : '<%= request.getContextPath()%>/service/memWishlist.do',
+		data : { "countWishlist" : "1" ,
+				 "memNo" : "26",
+				 "serviceNo" : $(this).val() },
+		type : 'get',
+		success : function(res){
+			if(res==1){
+					alert("성공");
+			}
+		},
+		error : function(xhr){
+			alert("상태 : "+xhr.status);
+		},
+		dataType : 'text'
+	})
+})
+	
+})
+</script>
+<body>
+<div class="sidebar pe-4 pb-3">
+    <nav class="navbar bg-light navbar-light">
+        
+		<div>
+			<label style="color: white;">moram<br/>moram<br/>moram<br/>moram<br/></label>
+		</div>
+        <div class="navbar-nav w-100" style="margin-left: 10%;">
+
+        
+      <%if("일반회원".equals(gradeName)){ %>
+        	<button id="toggle" name="toggle" class="btn btn-primary w-100 m-2" type="button">⇔ <%=toggleBtn%> 전환</button>
+            <a class="nav-item nav-link" id="updateMemberInfo"><i class="fa fa-tachometer-alt me-2"></i>회원 정보 변경</a>
+            <%if(existExpert != 1) {%>
+            <a class="nav-item nav-link" id="enrollExpert"><i class="fa fa-tachometer-alt me-2"></i>전문가 정보 등록</a>
+            <%} %>
+            <a class="nav-item nav-link" id="chat"><i class="fa fa-th me-2"></i>채팅내역</a>
+            <a class="nav-item nav-link" id="myBoard"><i class="fa fa-keyboard me-2"></i>작성한 게시글</a>
+            <a class="nav-item nav-link" id="schedule"><i class="fa fa-table me-2"></i>일정</a>
+            <a class="nav-item nav-link" id="serviceHistory"><i class="fa fa-chart-bar me-2"></i>이용한 서비스 내역</a>
+            <a class="nav-item nav-link" id="wishlist"><i class="fa fa-tachometer-alt me-2"></i>위시리스트</a>
+            <a class="nav-item nav-link" id="withdrawal"><i class="fa fa-chart-bar me-2"></i>회원탈퇴</a>
+            <a href="<%=request.getContextPath()%>/member/logout.do" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>로그아웃</a>
+            
+      <%}else if("전문가".equals(gradeName)){ %>
+        	<button id="toggle" name="toggle" class="btn btn-primary w-100 m-2" type="button">⇔ <%=toggleBtn%> 전환</button>
+            <a class="nav-item nav-link" id="updateMemberInfo"><i class="fa fa-tachometer-alt me-2"></i>회원 정보 변경</a>
+            <a class="nav-item nav-link" id="chat"><i class="fa fa-th me-2"></i>채팅내역</a>
+            <a class="nav-item nav-link" id="myBoard"><i class="fa fa-keyboard me-2"></i>작성한 게시글</a>
+            <a class="nav-item nav-link" id="schedule"><i class="fa fa-table me-2"></i>일정</a>
+            
+            <a class="nav-item nav-link" id="myServiceList"><i class="fa fa-chart-bar me-2"></i>내 서비스</a>
+            
+            <a class="nav-item nav-link" id="withdrawal"><i class="fa fa-chart-bar me-2"></i>회원탈퇴</a>
+            <a href="<%=request.getContextPath()%>/member/logout.do" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>로그아웃</a>
+    
+      <%}else if("관리자".equals(gradeName)){ %>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-th me-2"></i>회원 관리</a>
+                <div class="dropdown-menu shadow-sm m-0">
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=1&page=1" class="dropdown-item">목록 조회</a>
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=1&page=1" class="dropdown-item">신고내역 조회</a>
+                </div>
+            </div>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-th me-2"></i>서비스 관리</a>
+                <div class="dropdown-menu shadow-sm m-0">
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=1&page=1" class="dropdown-item">결제내역 조회</a>
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=2&page=1" class="dropdown-item">예약일정 조회</a> 
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=3&page=1" class="dropdown-item">신청/승인 관리</a>
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=3&page=1" class="dropdown-item">카테고리 관리</a>
+                </div>
+            </div>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-th me-2"></i>게시판 관리</a>
+                <div class="dropdown-menu shadow-sm m-0">
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=1&page=1" class="dropdown-item">공지사항</a>
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=2&page=1" class="dropdown-item">문의게시판</a> 
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=3&page=1" class="dropdown-item">후기게시판</a>
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=4&page=1" class="dropdown-item">홍보게시판</a>
+                    <a href="<%=request.getContextPath() %>/board/setSession.do?boardCategoryNo=5&page=1" class="dropdown-item">자유게시판</a>
+                </div>
+            </div>
+            <a href="<%=request.getContextPath()%>/member/logout.do" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>로그아웃</a>
+      <%} %>
+      
+      
+      
+      
+        </div>
+    </nav>
+</div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%=request.getContextPath() %>/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    
+    <script src="<%=request.getContextPath() %>/lib/chart/chart.min.js"></script>
+    <script src="<%=request.getContextPath() %>/lib/easing/easing.min.js"></script>
+    <script src="<%=request.getContextPath() %>/lib/waypoints/waypoints.min.js"></script>
+    <script src="<%=request.getContextPath() %>/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="<%=request.getContextPath() %>/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="<%=request.getContextPath() %>/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="<%=request.getContextPath() %>/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+	  <!-- iamport.payment.js -->
+	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="<%= request.getContextPath() %>/js/main.js"></script>
+</body>
+</html>

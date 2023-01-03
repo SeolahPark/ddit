@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="board">
+
+	<!--글 전체보기(목록+검색+페이징) -->
+	<sql id="dynamicCondition">
+	 <dynamic prepend="and">
+	     <isNotEmpty property="stype"  prepend=" and ">
+	        <isNotEmpty property="sword">
+	                $stype$  like '%'||#sword#||'%'
+	        </isNotEmpty>
+	     </isNotEmpty>
+	 </dynamic>
+	</sql>
+	<select id="getAllBoardList" parameterClass="map" resultClass="boardVO">
+		SELECT A.* 
+		  FROM (SELECT ROWNUM AS RNUM,
+                       B.* 
+				  from ( select C.BOARD_NO AS BOARD_NO, 
+                                C.BOARD_TITLE AS BOARD_TITLE,
+                                C.BOARD_CONTENT AS BOARD_CONTENT,
+                                C.MEM_NO AS MEM_NO,
+                                D.MEM_NAME AS MEM_NAME, 
+                                TO_CHAR(C.BOARD_DATE,'YYYY-MM-DD') AS BOARD_DATE,
+                                C.BOARD_HIT AS BOARD_HIT 
+				  		   FROM MYBOARD C, MEM D
+				  		  WHERE C.MEM_NO = D.MEM_NO
+				  		    AND C.BOARD_NO != 0
+				  		  <include refid="dynamicCondition"/>
+	       				  ORDER BY C.BOARD_NO DESC ) B 
+       <![CDATA[ WHERE ROWNUM <= #end#) A
+         WHERE A.RNUM >= #start# ]]>
+	</select>
+	
+	<select id="getTotalCount" parameterClass="map" resultClass="int">
+		SELECT COUNT(*) FROM MYBOARD WHERE 1=1 <include refid="dynamicCondition"/>
+	</select>
+
+	<!--글 상세보기 -->
+	<select id="getBoard" parameterClass="int" resultClass="boardVO">
+		SELECT A.BOARD_NO, 
+		       A.BOARD_TITLE, 
+		       A.BOARD_CONTENT, 
+		       A.MEM_NO,
+		       B.MEM_NAME, 
+		       TO_CHAR(A.BOARD_DATE,'YYYY-MM-DD') AS BOARD_DATE, 
+		       A.BOARD_HIT
+		  FROM MYBOARD A, MEM B
+		 WHERE A.MEM_NO = B.MEM_NO
+		   AND BOARD_NO = #board_no#
+	</select>
+
+	<!-- 조회수 증가 -->
+	<update id="setCountIncrement" parameterClass="int">
+		UPDATE MYBOARD SET BOARD_HIT = BOARD_HIT + 1 WHERE BOARD_NO = #board_no#
+	</update>
+	
+	<insert id="InsertBaord" parameterClass="boardVO">
+		INSERT INTO MYBOARD 
+		(BOARD_NO, BOARD_TITLE, BOARD_CONTENT, MEM_NO, BOARD_DATE, BOARD_HIT) 
+		VALUES 
+		((SELECT NVL(MAX(BOARD_NO),0) FROM MYBOARD)+1, #board_title#, #board_content#, #mem_no#, SYSDATE, 0)
+	</insert>
+	
+</sqlMap>

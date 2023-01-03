@@ -1,0 +1,53 @@
+package board.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import config.SqlMapClientFactory;
+import vo.BoardVO;
+
+public class BoardDAO implements IBoardDAO {
+	private static IBoardDAO instance = null;
+	private SqlMapClient smc = null;
+	private BoardDAO() {
+		smc = SqlMapClientFactory.getSqlMapClient();
+	}
+	public static IBoardDAO getInstance() {
+		if(instance == null) instance = new BoardDAO();
+		return instance;
+	}
+	
+	@Override
+	public List<BoardVO> getAllBoardList(Map<String, Object> map) {
+		List<BoardVO> list = new ArrayList<BoardVO>();
+		try {
+			list = smc.queryForList("board.getAllBoardList",map);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public BoardVO getBoard(int boardNo) {
+		BoardVO vo = new BoardVO();
+		smc.queryForObject("board.getBoard", boardNo)
+		return null;
+	}
+	
+	@Override
+	public void setCountIncrement(int boardNo) {
+		
+	}
+	
+	@Override
+	public int getTotalCount(Map<String, Object> map){
+		return 0;
+	}
+	
+	
+}

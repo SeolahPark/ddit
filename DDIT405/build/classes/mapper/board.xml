@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="board">
+	<select id="list" resultClass="boardVO">
+		SELECT BOARD_NO AS boardNo, TITLE, CONTENT, WRITER, TO_DATE(REG_DATE,'yyyy-mm-dd hh24:mi:ss') AS regDate FROM BOARD
+	</select>
+	
+	<select id="read" parameterClass="int" resultClass="boardVO">
+		SELECT BOARD_NO AS boardNo, TITLE, CONTENT, WRITER, TO_DATE(REG_DATE,'yyyy-mm-dd hh24:mi:ss') AS regDate FROM BOARD WHERE BOARD_NO = #boardNo#
+	</select>
+	
+	<update id="update" parameterClass="boardVO">
+		UPDATE BOARD SET TITLE=#title#, CONTENT=#content# WHERE BOARD_NO = #boardNo#
+	</update>
+	
+	<delete id="delete" parameterClass="int">
+		DELETE FROM BOARD WHERE BOARD_NO = #boardNo#
+	</delete>
+</sqlMap>

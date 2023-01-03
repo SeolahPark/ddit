@@ -1,0 +1,47 @@
+package board.service;
+
+import java.util.List;
+import java.util.Map;
+
+import board.dao.BoardDAO;
+import vo.BoardVO;
+import vo.PageVO;
+
+public class BoardService implements IBoardService{
+	private static IBoardService instance = null;
+	private BoardDAO dao = null;
+	private BoardService() {
+		dao = BoardDaoImpl.getInstance();
+	}
+	public static IBoardService getInstance() {
+		if(instance == null) instance = new BoardService();
+		return instance;
+	}
+	
+
+	private BoardServiceImpl() {
+	}
+
+	public static BoardService getInstance() {
+		if (instance == null)
+			instance = new BoardServiceImpl();
+		return instance;
+	}
+	
+	public PageVO pageInfo(int page, String stype, String sword) {
+		return null;
+	}
+
+	public List<BoardVO> getAllBoardList(Map<String, Object> map) {
+		return null;
+	}
+
+	public BoardVO getBoard(int boardNo) {
+		return null;
+	}
+
+	public void setCountIncrement(int boardNo) {
+		
+	}
+
+}

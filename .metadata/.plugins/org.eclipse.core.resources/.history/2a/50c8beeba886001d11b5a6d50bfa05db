@@ -1,0 +1,33 @@
+package board.service;
+
+import java.util.List;
+import java.util.Map;
+
+import vo.BoardVO;
+import vo.PageVO;
+
+public class BoardService {
+	private static IBoardService instance = null;
+	private BoardService() { }
+	public IBoardService getInstance() {
+		if(instance == null) instance = new BoardService();
+		return instance;
+	}
+
+	public PageVO pageInfo(int page, String stype, String sword) {
+		return null;
+	}
+
+	public List<BoardVO> getAllBoardList(Map<String, Object> map) {
+		return null;
+	}
+
+	public BoardVO getBoard(int boardNo) {
+		return null;
+	}
+
+	public void setCountIncrement(int boardNo) {
+		
+	}
+
+}
